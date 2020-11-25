@@ -13,7 +13,7 @@ t_stop = 30.0;
 
 % Longitudinal velocity
 vx = 10 % 36 kmph
-% vx = 100 % 36 kmph
+% vx = 33.33 % 120 kmph
 
 % Vehicle Parameters
 % Class B Hatchback has been used.
@@ -57,5 +57,7 @@ B = [ 0,    0;
 sys = ss(A, B, C, D);
 
 load('mpc1_10kmph.mat');
+
+load('reference_signal_timeseries.mat');
 
 sim('system_blocks');

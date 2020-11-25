@@ -24,8 +24,9 @@ t = input;
 % output = [-10, -10, -10, -10];
 % output = [-10, -10];
 f = 0.03;
-ref = sin(2*pi*f*t);
+ref_lat = sin(2*pi*f*t);
+ref_yaw = 0.5*sin(2*pi*f*t);
 
-output = ref;
+output = [ref_lat, ref_yaw];
 
 end

@@ -61,4 +61,4 @@ load('mpc1_10kmph_noLimits.mat');
 
 load('reference_signal_timeseries.mat');
 
-sim('system_blocks');
+out = sim('system_blocks');

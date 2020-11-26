@@ -57,8 +57,10 @@ B = [ 0,    0;
 sys = ss(A, B, C, D);
 
 % load('mpc1_10kmph.mat');
-load('mpc1_10kmph_noLimits.mat');
+% load('mpc1_10kmph_noLimits.mat');
+load('mpc1_10kmph_betterLimits_butSoftRateLts.mat');
 
-load('reference_signal_timeseries.mat'); % Clearly, the yaw angle is in degrees...ranges till a value of 8 or so (Units not given in toolbox though)
+% load('reference_signal_timeseries.mat'); % Clearly, the yaw angle is in degrees...ranges till a value of 8 or so (Units not given in toolbox though)
+load('reference_signal_timeseries_longer.mat'); 
 
 out = sim('system_blocks');

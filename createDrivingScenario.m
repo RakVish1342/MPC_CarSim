@@ -32,7 +32,7 @@ waypoints = [5 -1.4 0;
     128.7 2.5 0;
     148.5 2.5 0];
 
-speed = 10;
+speed = 10; % m/s as per toolbox settings
 
 trajectory(egoVehicle, waypoints, speed);
 

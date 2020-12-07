@@ -4,7 +4,8 @@ clear all; close all;
 
 global t_start t_step t_stop
 global Ap Bp Cp Dp
-global Q R G
+global Q R 
+global G Gz Gy Gr
 
 t_start = 0.0;
 t_step = 0.01;
@@ -75,20 +76,35 @@ sys = ss(Ap, Bp, Cp, Dp);
 % Q = 10*eye(4);
 % R = eye(2);
 % [G, K, e] = lqr(Ap, Bp, Q, R);
-Q = 1*eye(6);
-R = 2*eye(2);
+% Q = 1*eye(6);
+% R = 0.01*eye(2);
+% [G, K, e] = lqr(Aaug, Baug, Q, R);
+% Q = diag([1,1,1,1,1,1]);
+% Q = Caug'*Caug;
+
+% Q = diag([0,0,2.5,2.5,1,1])
+% R = 0.001;
+% [G, K, e] = lqr(Aaug, Baug, Q, R);
+
+Q = diag([0,0,2.5,2.5,1,1]);
+R = 0.001;
 [G, K, e] = lqr(Aaug, Baug, Q, R);
 
-% % Gains for integrator states
-% Gz = G(:,1:2);
-% % Gains for reference/output tracking states -- y, phi
-% Gy = G(:,3:5);
-% % Gains for remaining states -- y_dot, phi_dot
-% Gr = G(:,4:6);
+
+% Gains for integrator states
+Gz = G(:,1:2);
+% Gains for reference/output tracking states -- y, phi
+Gy = [G(:,3), G(:,5)];
+% Gains for remaining states -- y_dot, phi_dot
+Gr = [G(:,4), G(:,6)];
 
 % load('reference_signal_timeseries.mat'); % Clearly, the yaw angle is in degrees...ranges till a value of 8 or so (Units not given in toolbox though)
 load('reference_signal_timeseries_longer.mat'); 
 
 % addpath('C:\opt\MATLAB\2019b\toolbox\matlab\system\@system');
+
+
+% sys_cl = ss(Aaug-Baug*G, Baug, Caug, Daug);
+% step(sys_cl);
 
 out = sim('system_blocks');

@@ -40,3 +40,6 @@ reference_signal = [];
 while advance(scenario)
     reference_signal = [reference_signal;  [scenario.SimulationTime, egoVehicle.Position(2), egoVehicle.Yaw ]];
 end
+plot(reference_signal(:,1), reference_signal(:,2), reference_signal(:,1), reference_signal(:,3));
+reference_signal_timeseries = timeseries( [reference_signal(:,2), reference_signal(:,3)], reference_signal(:,1) );
+save('reference_signal_timeseries.mat', 'reference_signal_timeseries')

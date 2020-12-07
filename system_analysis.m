@@ -117,7 +117,12 @@ sigma(H)
 
 %% Coupling at Low Frequencies
 
-%How is this analysed?
+% How is this analysed?
+
+% SVD at dc and few other frequencies ... look for off diagonal elements.
+
+% Also use this to check how much each input will get scaled to generate
+% the output.
 
 
 %% Step Response
@@ -142,3 +147,19 @@ sigma(H)
 % Settling time of approx 6sec for lateral velocity and yaw rate observed.
 
 step(sys);
+
+
+%%
+
+% Sensityvity and Co-Sense at different points in the loop
+
+% Verify gain and phase margin
+
+% Get TF (transfer function) for controller and plant...and analyse those?
+
+% root locus and bode of closed loop system
+
+% puma robot modal analysis
+
+% Use GLQ and GOL
+

@@ -4,6 +4,7 @@ clear all; close all;
 
 global t_start t_step t_stop
 global Ap Bp Cp Dp
+global A B C D
 global Q R 
 global G Gz Gy Gr
 
@@ -57,6 +58,11 @@ Bp = [ 0,    0;
 Cp = eye(4); % Output all states
 Dp = zeros(size(Bp));
 
+A = Ap;
+B = Bp;
+C = Cp;
+D = Dp;
+
 sys = ss(Ap, Bp, Cp, Dp);
 
 % Integrator States 2x2
@@ -97,6 +103,12 @@ Gz = G(:,1:2);
 Gy = [G(:,3), G(:,5)];
 % Gains for remaining states -- y_dot, phi_dot
 Gr = [G(:,4), G(:,6)];
+
+
+% load('mpc1_10kmph.mat');
+% load('mpc1_10kmph_noLimits.mat');
+load('mpc1_10kmph_betterLimits_butSoftRateLts.mat');
+
 
 % load('reference_signal_timeseries.mat'); % Clearly, the yaw angle is in degrees...ranges till a value of 8 or so (Units not given in toolbox though)
 % load('reference_signal_timeseries_longer.mat'); 

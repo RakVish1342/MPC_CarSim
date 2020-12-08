@@ -1,0 +1,304 @@
+%%% Blank Document
+% \documentclass[12pt]{article}
+% \usepackage{blindtext}
+% \usepackage{amsmath}
+
+% \documentclass[conference]{IEEEtran} % double column
+\documentclass[journal, onecolumn]{IEEEtran} % single column
+%\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{relsize}
+\usepackage[caption=false, font=footnotesize]{subfig}
+\usepackage{caption}
+\usepackage{float}
+\usepackage[caption=false]{subfig}
+\usepackage{url}
+%\usepackage{IEEEtran}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+\title{Four Wheel Steering (4WS) Control}
+\author{Name: Rakshith Vishwanatha \\ ASU ID: 1217756241 \\ Mobile: 480-781-6116}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Four Wheel Steer (4WS) Dynamics}
+\subsection{Overview}
+\subsection{Derivation for Bike}
+
+
+\section{PID Controller}
+\subsection{Overview}
+\subsection{Derivation for Bike}
+
+
+\section{Control Barrier Function}
+\subsection{Overview}
+\subsection{Derivation for Bike}
+
+
+
+\section{Misc.}
+\subsection{Bike Dynamics Equation}
+
+\begin{eqnarray}
+    \begin{aligned}
+        (I_{bz} + I_{fz}) \ddot{\phi_b} = 
+        (I_{fx} - I_{fy}) \{ 
+        {\Omega}^2 {cos(\phi_w)}^2 sin(\phi_b) cos(\phi_b) \\
+        -\Omega \cos(\phi_w)(\cos(2\phi_b) + I_{fz})\dot{\phi_w} \} \\
+        + (m_b h_b + m_f h_f) g \sin(\phi_b)
+    \end{aligned}
+\end{eqnarray}
+
+\begin{eqnarray}
+    \begin{aligned}
+        X &= 
+        \begin{bmatrix}
+            \phi_b \\
+            \dot{\phi_b} \\
+            \phi_w
+        \end{bmatrix} \\ 
+        u &= \dot{\phi_w}
+    \end{aligned}
+\end{eqnarray}
+
+\begin{eqnarray}
+    \begin{aligned}
+        \dot{X} &= f(X) + g(X) u
+    \end{aligned}
+\end{eqnarray}
+
+
+\begin{eqnarray}
+    \begin{aligned}
+        \begin{bmatrix}
+            \dot{\phi_b} \\
+            \ddot{\phi_b} \\
+            \dot{\phi_w}
+        \end{bmatrix} 
+        =         
+        \begin{bmatrix}
+            \dot{\phi_b} \\ \\
+
+            \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+            \{ {\Omega}^2 {cos(\phi_w)}^2 sin(\phi_b) cos(\phi_b) \} + \\
+            \frac{ 1 }{(I_{bz} + I_{fz})} (m_b h_b + m_f h_f) g \sin(\phi_b) \\ \\
+
+            0
+        \end{bmatrix}
+        + \\
+        \begin{bmatrix}
+            0 \\ \\
+
+            \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+            \{ -\Omega \cos(\phi_w)(\cos(2\phi_b) + I_{fz})\dot{\phi_w} \} \\ \\
+            
+            1
+        \end{bmatrix}
+        \dot{\phi_w}
+    \end{aligned}
+\end{eqnarray}
+
+\subsection{Control Barrier Equations}
+
+Requirement is:
+\begin{eqnarray}
+    \begin{aligned}
+        |\phi_b| &\leq \phi_{bMax} \\
+        |\dot{\phi_b}| &\leq \dot{\phi}_{bMax} \\
+        |\phi_w| &\leq \phi_{wMax}
+    \end{aligned}
+\end{eqnarray}
+
+So CBFs are defined as:
+\begin{eqnarray}
+    \begin{aligned}
+        |\phi_b| &\leq \phi_{bMax} \\
+        |\dot{\phi_b}| &\leq \dot{\phi}_{bMax} \\
+        |\phi_w| &\leq \phi_{wMax}
+    \end{aligned}
+\end{eqnarray}
+
+This leads to siz CBF equations:
+\begin{eqnarray}
+    \begin{aligned}
+        h_1(X):\ \ 0 &\leq \phi_{bMax} - \phi_b \\
+        h_2(X):\ \ 0 &\leq \phi_{bMax} + \phi_b \\
+        h_3(X):\ \ 0 &\leq \dot{\phi}_{bMax} - \dot{\phi_b}\\
+        h_4(X):\ \ 0 &\leq \dot{\phi}_{bMax} + \dot{\phi_b}\\
+        h_5(X):\ \ 0 &\leq \phi_{wMax} - \phi_w \\
+        h_6(X):\ \ 0 &\leq \phi_{wMax} + \phi_w \\
+    \end{aligned}
+\end{eqnarray}
+
+\subsection{QP Solution}
+
+\begin{eqnarray}
+    \begin{aligned}
+        u^* =& \arg\min_{u \epsilon U} \frac{1}{2}||u_{des} - u_{asif} ||^2 \\
+        &s.t. \ L_fh_i + L_g h_i u + \alpha h_i \geq 0
+    \end{aligned}
+\end{eqnarray}
+
+The Lie derivative of a scalar function such as $h$ (as opposed to a vector function) is given by:
+\begin{eqnarray}
+    \begin{aligned}
+        Lfh &= \triangledown h f(X) \\
+            &= \Big<[\frac{\delta}{\delta x_1}, \frac{\delta}{\delta x_2}, \frac{\delta}{\delta x_3}],  h \Big> f(X) \\
+            &= \Big<[\frac{\delta}{\delta \phi_b}, \frac{\delta}{\delta \dot{\phi_b}}, \frac{\delta}{\delta \phi_w}],  h \Big> f(X)
+    \end{aligned}
+\end{eqnarray}
+
+Thus, the Lie derivative inequalities provided above in the squared error optimizer are:
+\begin{equation}
+    \begin{aligned}
+        &L_fh_1 + L_g h_1 u + \alpha h_1 \geq 0 \\
+        &\Big< [-1,\ 0,\ 0], h_1(X)\Big> f(X) + \Big< [-1,\ 0,\ 0], h_1(X)\Big> g(X)u + \alpha h_1 \geq 0 \\
+        &-f_1(X) + 0 + \alpha h_6 \geq 0 \\
+        &-\dot{\phi_b} + 0 + \alpha (\phi_{bMax} - \phi_b) \geq 0
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        &L_fh_2 + L_g h_2 u + \alpha h_2 \geq 0 \\
+        &\Big< [+1,\ 0,\ 0], h_2(X)\Big> f(X) + \Big< [+1,\ 0,\ 0], h_2(X)\Big> g(X)u + \alpha h_2 \geq 0 \\
+        &+f_1(X) + 0 + \alpha h_6 \geq 0 \\
+        &+\dot{\phi_b} + 0 + \alpha (\phi_{bMax} + \phi_b) \geq 0 \\
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        &L_fh_3 + L_g h_3 u + \alpha h_3 \geq 0 \\
+        &\Big< [0,\ -1,\ 0], h_3(X)\Big> f(X) + \Big< [0,\ -1,\ 0], h_3(X)\Big> g(X)u + \alpha h_3 \geq 0 \\
+        &-f_2(X) - g_2(X)u + \alpha h_3 \geq 0 \\ \\ 
+        & - \Bigg[
+        \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+        \{ {\Omega}^2 {cos(\phi_w)}^2 sin(\phi_b) cos(\phi_b) \} + \\
+        &\frac{ 1 }{(I_{bz} + I_{fz})} (m_b h_b + m_f h_f) g \sin(\phi_b) 
+        \Bigg] \\
+        & - \Bigg[
+        \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+        \{ -\Omega \cos(\phi_w)(\cos(2\phi_b) + I_{fz})\dot{\phi_w} \} 
+        \Bigg]\\
+        &+ \alpha (\dot{\phi}_{bMax} - \dot{\phi}_b) \geq 0 \\
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        &L_fh_3 + L_g h_3 u + \alpha h_3 \geq 0 \\
+        &\Big< [0,\ -1,\ 0], h_3(X)\Big> f(X) + \Big< [0,\ -1,\ 0], h_3(X)\Big> g(X)u + \alpha h_3 \geq 0 \\
+        &-f_2(X) - g_2(X)u + \alpha h_3 \geq 0 \\ \\ 
+        & + \Bigg[
+        \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+        \{ {\Omega}^2 {cos(\phi_w)}^2 sin(\phi_b) cos(\phi_b) \} + \\
+        &\frac{ 1 }{(I_{bz} + I_{fz})} (m_b h_b + m_f h_f) g \sin(\phi_b) 
+        \Bigg] \\
+        & + \Bigg[
+        \frac{ (I_{fx} - I_{fy}) }{(I_{bz} + I_{fz})} 
+        \{ -\Omega \cos(\phi_w)(\cos(2\phi_b) + I_{fz})\dot{\phi_w} \} 
+        \Bigg]\\
+        &+ \alpha (\dot{\phi}_{bMax} + \dot{\phi}_b) \geq 0 \\
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        &L_fh_5 + L_g h_5 u + \alpha h_5 \geq 0 \\
+        &\Big< [0,\ 0,\ -1], h_5(X)\Big> f(X) + \Big< [0,\ 0,\ -1], h_5(X)\Big> g(X)u + \alpha h_5 \geq 0 \\
+        &0 - g_3(X)u + \alpha h_6 \geq 0 \\
+        &0 -\dot{\phi_w} + \alpha (\phi_{wMax} - \phi_w) \geq 0 \\
+    \end{aligned}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        &L_fh_6 + L_g h_6 u + \alpha h_6 \geq 0 \\
+        &\Big< [0,\ 0,\ -1], h_6(X)\Big> f(X) + \Big< [0,\ 0,\ -1], h_6(X)\Big> g(X)u + \alpha h_6 \geq 0 \\
+        &0 + g_3(X)u + \alpha h_6 \geq 0 \\
+        &0 + \dot{\phi_w} + \alpha (\phi_{wMax} + \phi_w) \geq 0 \\
+    \end{aligned}
+\end{equation}
+
+
+\subsection{Calculation of $\alpha$ in QP Equations}
+$\alpha$ is a class Kappa function defined as:
+\begin{equation}
+    \begin{aligned}
+        &\alpha(r) \triangleq - \min_{\begin{array} {c}\scriptstyle x \epsilon A(r) \\[-4pt]
+                \scriptstyle u \epsilon U \end{array} }
+        \Big( \min_{i \epsilon [i,n]} L_fh_i + L_gh_iu\Big) \\
+        &\text{where,}  \\
+        &A(r) \triangleq \{ x \ \epsilon \ S \ | \ 
+        \exists \ i \ \epsilon \ [1, n], \ 0 \leq h_i(X) \leq r \} \subseteq S \\
+        &\text{where, S is not just the safety set, but is the VIABLE safety set.}
+    \end{aligned}
+\end{equation}
+
+In its expanded form this means:
+$\alpha$ is a class Kappa function defined as:
+\begin{equation}
+    \begin{aligned}
+        \label{Ar_h_ineq}
+        &\alpha(r) \triangleq - \min_{\begin{array} {c}\scriptstyle x \epsilon A(r) \\[-4pt]
+                \scriptstyle u \epsilon U \end{array} }
+        \Big( \min 
+        \begin{bmatrix}
+            L_fh_1 + L_gh_1u \\
+            L_fh_2 + L_gh_2u \\
+            L_fh_3 + L_gh_3u \\
+            L_fh_4 + L_gh_4u \\
+            L_fh_5 + L_gh_5u \\
+            L_fh_6 + L_gh_6u \\
+        \end{bmatrix}
+        \Big) \\
+        \text{with the constraints placed by the $A(r)$ definition/inequality} \\
+        &0 \leq h_1 \leq r \\
+        &0 \leq h_2 \leq r \\
+        &0 \leq h_3 \leq r \\
+        &0 \leq h_4 \leq r \\
+        &0 \leq h_5 \leq r \\
+        &0 \leq h_6 \leq r \\
+    \end{aligned}
+\end{equation}
+
+The inequalities $0 \leq h_i \leq r$ place the additional constraint/relation between 
+the $\alpha$ Kappa function's $r$ and the CBF state constraints of 
+(obtained by summing up similar CBF equations and simplifying):
+\begin{equation}
+    \begin{aligned}
+        -\frac{r}{2} \leq \phi_b \leq +\frac{r}{2} \\
+        -\frac{r}{2} \leq \dot{\phi}_b \leq +\frac{r}{2} \\
+        -\frac{r}{2} \leq \phi_w \leq +\frac{r}{2} \\
+    \end{aligned}
+\end{equation}
+So CBF max state values chosen should be within the overall $r/2$ bounds placed by the class Kappa function. \\
+
+When we put the $\alpha(r)$ equation in words, it effectively means:
+\begin{itemize}
+    \item Create an empty 2D table of size $x \times u$ to represent all combos of states and controls
+    \item The number of states itself that can be created/checked is defined by all states within the 
+    viable safety set which satisfy $0 \leq h_i \leq r$ given in the $A(r)$ equation, and expanded in (\ref{Ar_h_ineq})'s inequalities.
+    \item For each of the entries in the 2D matrix, calculate a $n\times 1$ vector corresponding to each of the CBF equations.
+    \item Now for each of the vectors in the 2D matrix, calculate and store in-place the minimum of that vector
+    \item Then, calculate the min over the whole 2D matrix
+    \item Negate this value to obtain the value of $\alpha$
+\end{itemize}
+Ofcourse, all these steps can be vectorized and handled more efficiently using an optimizaiton toolbox like fmincon() in MATLAB.
+
+
+\end{document}

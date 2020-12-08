@@ -9,7 +9,7 @@ global G Gz Gy Gr
 
 t_start = 0.0;
 t_step = 0.01;
-t_stop = 30.0;
+t_stop = 250;
 
 %% Vehicle Parameters
 
@@ -99,7 +99,8 @@ Gy = [G(:,3), G(:,5)];
 Gr = [G(:,4), G(:,6)];
 
 % load('reference_signal_timeseries.mat'); % Clearly, the yaw angle is in degrees...ranges till a value of 8 or so (Units not given in toolbox though)
-load('reference_signal_timeseries_longer.mat'); 
+% load('reference_signal_timeseries_longer.mat'); 
+load('ref_sig_500m_ts.mat');
 
 % addpath('C:\opt\MATLAB\2019b\toolbox\matlab\system\@system');
 

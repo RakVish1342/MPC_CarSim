@@ -59,7 +59,7 @@ waypoints = [1 -3 0.01;
     390 0 0;
     400 0 0;
     410 0 0];
-speed = 30;
+speed = 2;
 trajectory(egoVehicle, waypoints, speed);
 
 ref_sig = [];

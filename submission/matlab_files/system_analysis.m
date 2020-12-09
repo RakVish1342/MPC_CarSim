@@ -149,7 +149,22 @@ sigma(H)
 step(sys);
 
 
-%%
+%% Cross Coupling at dc (via SVD of Plant)
+% s = tf('s');
+% 
+% tf_ol = C*inv(s*eye(4) - A)*B + D
+% 
+% tf_freqResp = freqresp(tf_ol, 0) % freq resp at dc
+% 
+% [U S V] = svd(tf_freqResp)
+
+
+
+
+
+
+
+%% TODO, or done in other files
 
 % Sensityvity and Co-Sense at different points in the loop
 
@@ -162,4 +177,3 @@ step(sys);
 % puma robot modal analysis
 
 % Use GLQ and GOL
-
